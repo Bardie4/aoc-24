@@ -1,6 +1,7 @@
 mod days {
     pub mod day01;
     pub mod day02;
+    pub mod day03;
 }
 
 fn main() {
@@ -24,6 +25,7 @@ fn main() {
     match day {
         1 => days::day01::solve(input_file_path),
         2 => days::day02::solve(input_file_path),
+        3 => days::day03::solve(input_file_path),
         _ => unreachable!(),
     }
 }
