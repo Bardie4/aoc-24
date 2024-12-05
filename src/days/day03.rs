@@ -10,7 +10,7 @@ pub fn solve(path: &str) {
     let silver_sum = calculate_silver(&data);
     println!("Silver sum: {}", silver_sum);
 
-    let gold_sum = calculate_gold(&data);
+    let gold_sum = calculate_gold(&data.join("\n"));
     println!("Gold sum: {}", gold_sum);
 }
 
@@ -34,27 +34,28 @@ fn calculate_silver(data: &Vec<String>) -> u32 {
     total_sum
 }
 
-fn calculate_gold(data: &Vec<String>) -> u32 {
-    let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
-    let mut total_sum = 0;
+fn calculate_gold(data: &String) -> i32 {
+    // Append a do() to the start and don't() to the end of the data
+    let line = format!("do(){}don't()", data);
 
-    // Use an iterator to split the data into segments
-    let joined_data = data.join("\n");
-    let mut segments = joined_data.split("don't()");
+    // Match mul() segments enclosed by do() and don't()
+    let re = Regex::new(r"do\([\s\S]*?mul\((\d+),(\d+)\)[\s\S]*?don't\(\)").unwrap();
 
-    if let Some(first_segment) = segments.next() {
-        let mut current_segment = first_segment;
-
-        while !current_segment.is_empty() {
-            for cap in re.captures_iter(current_segment) {
-                let x: u32 = cap[1].parse().unwrap();
-                let y: u32 = cap[2].parse().unwrap();
-                total_sum += x * y;
-            }
-
-            current_segment = segments.next().unwrap_or("");
-        }
-    }
+    let total_sum: i32 = re
+        .captures_iter(&line)
+        .flat_map(|cap| {
+            let segment = cap[0].to_owned(); // Avoid borrowing the captured segment
+            Regex::new(r"mul\((\d+),(\d+)\)")
+                .unwrap()
+                .captures_iter(&segment)
+                .map(|inner_cap| {
+                    let x: i32 = inner_cap[1].parse().unwrap();
+                    let y: i32 = inner_cap[2].parse().unwrap();
+                    x * y
+                })
+                .collect::<Vec<_>>() // Avoid borrowing
+        })
+        .sum();
 
     total_sum
 }
