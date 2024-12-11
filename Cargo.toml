@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 regex = "1"  # or the latest version
+plotters = "0.3"

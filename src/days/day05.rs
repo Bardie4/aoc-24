@@ -1,7 +1,3 @@
-use std::str::FromStr;
-
-use regex::Regex;
-
 fn read_data(path: &str) -> Vec<Vec<char>> {
     let contents = std::fs::read_to_string(path).unwrap();
     contents
@@ -11,13 +7,13 @@ fn read_data(path: &str) -> Vec<Vec<char>> {
 }
 
 fn calculate_silver(data: &Vec<Vec<char>>) -> u32 {
-    let mut total_sum = 0;
+    let total_sum = 0;
 
     total_sum
 }
 
 fn calculate_gold(data: &Vec<Vec<char>>) -> i32 {
-    let mut total_sum = 0;
+    let total_sum = 0;
 
     total_sum
 }
